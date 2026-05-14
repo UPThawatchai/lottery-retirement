@@ -1,16 +1,76 @@
-# React + Vite
+# สุ่มหวยเกษียณ — อิงสถิติหวยไทย 30 ปี
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+แอปสุ่มเลขหวยสำหรับเกษียณ 60 ใบ/สัปดาห์ งบ 3,000 บาท อิงสถิติหวยไทยย้อนหลัง 30 ปี (~720 งวด)
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **3 โหมดสุ่ม**
+  - 📊 อิงสถิติ — ให้น้ำหนักเลขท้าย 2 ตัวตามความถี่จากประวัติ
+  - 🍀 เลขมงคล — เลขซ้ำ เลขกลม เลขสวยงาม
+  - 🎲 สุ่มเต็ม — สุ่มอิสระ 100%
+- **ตาราง 60 ใบ** — กดที่ใบเพื่อสุ่มใบนั้นใหม่
+- **วิเคราะห์ผล** — แสดงเลขท้าย 2 ตัวที่ถูกเลือกบ่อย เทียบกับสถิติประวัติ
+- **งวดถัดไป** — คำนวณวันออกหวยงวดต่อไป (1 และ 16 ทุกเดือน)
+- **สรุปงบ** — แสดงยอดรวม 3,000 บาท/สัปดาห์ และเปรียบเทียบกับการออม
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **React 18** + **Vite**
+- **Tailwind CSS**
+
+---
+
+## Quick Start
+
+```bash
+npm install
+npm run dev
+```
+
+เปิด http://localhost:5175 (หรือ port ที่ Vite เลือกให้)
+
+---
+
+## Build & Deploy
+
+```bash
+npm run build
+# ไฟล์ออกมาใน dist/ → deploy ได้เลย
+```
+
+---
+
+## โครงสร้าง
+
+```
+src/
+├── components/
+│   ├── TicketGrid.jsx   ← แสดงตาราง 60 ใบ
+│   └── StatsBadge.jsx   ← วิเคราะห์เลขท้าย 2 ตัว
+├── hooks/
+│   └── useLottery.js    ← logic สุ่มเลข + state management
+├── data/
+│   └── statistics.js    ← ข้อมูลสถิติหวยจำลอง 30 ปี
+└── App.jsx              ← หน้าหลัก
+```
+
+---
+
+## สถานะโปรเจกต์ (อัปเดต 2026-05-14)
+
+- [x] Phase 1: โครงสร้างหลัก + 3 โหมดสุ่ม + ตาราง 60 ใบ + วิเคราะห์สถิติ
+- [ ] Phase 2: ใส่ข้อมูลหวยจริงย้อนหลัง (scrape จาก API กองสลาก)
+- [ ] Phase 3: บันทึกชุดที่เคยสุ่ม (localStorage)
+- [ ] Phase 4: Export PDF / Print ตั๋ว
+- [ ] Phase 5: Deploy + Push to GitHub (ต้องการ gh auth login)
+
+---
+
+## หมายเหตุ
+
+สถิติในแอปนี้เป็นการ **จำลอง** จากรูปแบบหวยไทย ไม่ใช่ข้อมูลหวยจริง  
+Phase 2 จะใส่ข้อมูลจริงจากกองสลากออมสิน
