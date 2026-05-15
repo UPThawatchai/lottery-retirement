@@ -1,6 +1,16 @@
 import { useState, useCallback } from 'react'
 import { twoDigitFrequency, threeDigitFrequency, buildWeightedPool } from '../data/statistics'
 
+const SAVED_SETS_KEY = 'lottery_saved_sets'
+
+function loadSavedSets() {
+  try {
+    return JSON.parse(localStorage.getItem(SAVED_SETS_KEY) || '[]')
+  } catch {
+    return []
+  }
+}
+
 const TICKET_PRICE = 50
 const WEEKLY_TICKETS = 60
 const WEEKLY_BUDGET = TICKET_PRICE * WEEKLY_TICKETS // 3000 บาท
@@ -96,6 +106,7 @@ export function useLottery() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [strategy, setStrategy] = useState('stat')
   const [analysis, setAnalysis] = useState(null)
+  const [savedSets, setSavedSets] = useState(loadSavedSets)
 
   const generate = useCallback(() => {
     setIsGenerating(true)
@@ -117,6 +128,35 @@ export function useLottery() {
     })
   }, [])
 
+  const saveCurrentSet = useCallback(() => {
+    if (tickets.length === 0) return
+    const newSet = {
+      id: Date.now(),
+      date: new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' }),
+      strategy,
+      tickets: [...tickets],
+    }
+    setSavedSets(prev => {
+      const updated = [newSet, ...prev].slice(0, 10) // เก็บสูงสุด 10 ชุด
+      localStorage.setItem(SAVED_SETS_KEY, JSON.stringify(updated))
+      return updated
+    })
+  }, [tickets, strategy])
+
+  const deleteSavedSet = useCallback((id) => {
+    setSavedSets(prev => {
+      const updated = prev.filter(s => s.id !== id)
+      localStorage.setItem(SAVED_SETS_KEY, JSON.stringify(updated))
+      return updated
+    })
+  }, [])
+
+  const loadSavedSet = useCallback((set) => {
+    setTickets(set.tickets)
+    setAnalysis(analyzeTickets(set.tickets))
+    setStrategy(set.strategy)
+  }, [])
+
   return {
     tickets,
     isGenerating,
@@ -125,6 +165,10 @@ export function useLottery() {
     analysis,
     generate,
     regenerateOne,
+    saveCurrentSet,
+    savedSets,
+    deleteSavedSet,
+    loadSavedSet,
     budget: WEEKLY_BUDGET,
     ticketPrice: TICKET_PRICE,
     weeklyCount: WEEKLY_TICKETS,

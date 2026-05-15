@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { useLottery } from './hooks/useLottery'
 import TicketGrid from './components/TicketGrid'
 import StatsBadge from './components/StatsBadge'
+import SavedSets from './components/SavedSets'
 import './index.css'
 
 const STRATEGIES = [
@@ -9,10 +11,17 @@ const STRATEGIES = [
   { id: 'random', label: '🎲 สุ่มเต็ม', desc: 'สุ่มอิสระ 100%' },
 ]
 
+const TABS = [
+  { id: 'main', label: '🎰 สุ่มเลข' },
+  { id: 'saved', label: '📂 ชุดที่บันทึก' },
+]
+
 export default function App() {
+  const [activeTab, setActiveTab] = useState('main')
   const {
     tickets, isGenerating, strategy, setStrategy,
     analysis, generate, regenerateOne,
+    saveCurrentSet, savedSets, deleteSavedSet, loadSavedSet,
     budget, ticketPrice, weeklyCount,
   } = useLottery()
 
@@ -29,7 +38,41 @@ export default function App() {
         </p>
       </header>
 
+      {/* Tab navigation */}
+      <div className="max-w-4xl mx-auto px-4 mb-2">
+        <div className="flex gap-2 bg-white/10 rounded-2xl p-1">
+          {TABS.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-1 py-2 rounded-xl text-sm font-bold transition-all ${
+                activeTab === tab.id
+                  ? 'bg-yellow-400 text-yellow-900 shadow'
+                  : 'text-white/60 hover:text-white'
+              }`}
+            >
+              {tab.label}
+              {tab.id === 'saved' && savedSets.length > 0 && (
+                <span className="ml-1 text-xs bg-red-400 text-white rounded-full px-1.5">{savedSets.length}</span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <main className="max-w-4xl mx-auto px-4 pb-16 space-y-6">
+
+        {/* Saved sets tab */}
+        {activeTab === 'saved' && (
+          <SavedSets
+            savedSets={savedSets}
+            onLoad={(set) => { loadSavedSet(set); setActiveTab('main') }}
+            onDelete={deleteSavedSet}
+          />
+        )}
+
+        {/* Main tab */}
+        {activeTab === 'main' && <>
 
         {/* Info cards */}
         <div className="grid grid-cols-3 gap-3 text-center">
@@ -104,6 +147,14 @@ export default function App() {
               <TicketGrid tickets={tickets} onRegenerate={regenerateOne} />
             </div>
 
+            {/* Save button */}
+            <button
+              onClick={saveCurrentSet}
+              className="w-full py-3 rounded-2xl font-bold text-sm bg-white/10 hover:bg-white/20 text-yellow-300 border border-yellow-400/30 transition-colors"
+            >
+              💾 บันทึกชุดเลขนี้
+            </button>
+
             {/* Analysis */}
             <StatsBadge analysis={analysis} />
 
@@ -126,6 +177,8 @@ export default function App() {
             <p>กดปุ่มด้านบนเพื่อสุ่มเลขหวย</p>
           </div>
         )}
+
+        </> /* end main tab */}
       </main>
     </div>
   )
