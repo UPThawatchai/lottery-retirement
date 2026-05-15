@@ -16,6 +16,8 @@
 - **สรุปงบ** — แสดงยอดรวม 3,000 บาท/สัปดาห์ และเปรียบเทียบกับการออม
 - **บันทึกชุดเลข** — เก็บชุดเลขที่สุ่มแล้วได้ไว้ใน localStorage สูงสุด 10 ชุด
 - **โหลดชุดเดิม** — เปิดชุดเลขที่บันทึกไว้ขึ้นมาดูหรือสุ่มใหม่
+- **พิมพ์ตั๋ว (Phase 4)** — พรีวิวและสั่งพิมพ์ตั๋วหวย 60 ใบ ด้วย print-optimized layout
+- **Footer** — UP-Thawatchai + QR Code สำหรับสนับสนุนผู้พัฒนา
 
 ---
 
@@ -64,13 +66,13 @@ src/
 
 ---
 
-## สถานะโปรเจกต์ (อัปเดต 2026-05-14)
+## สถานะโปรเจกต์ (อัปเดต 2026-05-15)
 
 - [x] Phase 1: โครงสร้างหลัก + 3 โหมดสุ่ม + ตาราง 60 ใบ + วิเคราะห์สถิติ
 - [x] Phase 2: ใส่ข้อมูลหวยจริงย้อนหลัง 30 ปี (720 งวด ใน lotteryHistory.js) + คำนวณความถี่จากประวัติจริง
 - [x] Phase 3: บันทึกชุดที่เคยสุ่ม (localStorage) + Tab แสดงชุดที่บันทึก + โหลด/ลบชุด
-- [ ] Phase 4: Export PDF / Print ตั๋ว
-- [ ] Phase 5: Deploy + Push to GitHub (ต้องการ gh auth login)
+- [x] Phase 4: Print/Export ตั๋ว — PrintableTickets component + print CSS + Footer UP-Thawatchai
+- [ ] Phase 5: Deploy GitHub Pages + push โค้ดขึ้น GitHub (pending gh auth)
 
 ---
 

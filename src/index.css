@@ -74,3 +74,77 @@ body {
 .animate-spin-slow {
   animation: spin-slow 1.5s linear infinite;
 }
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+    font-family: 'Sarabun', sans-serif;
+  }
+
+  .no-print { display: none !important; }
+
+  .print-only { display: block !important; }
+
+  #root > div > header,
+  #root > div > .no-print { display: none !important; }
+
+  .print-page {
+    page-break-after: always;
+    padding: 10mm;
+  }
+
+  .print-ticket-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8mm;
+    padding: 0;
+  }
+
+  .print-ticket {
+    border: 2px dashed #c8a800;
+    border-radius: 8px;
+    padding: 6px 8px;
+    background: #fffbe6;
+    text-align: center;
+    page-break-inside: avoid;
+  }
+
+  .print-ticket .ticket-num {
+    font-size: 18pt;
+    font-weight: 900;
+    letter-spacing: 4px;
+    font-family: 'Courier New', monospace;
+    color: #1a1a2e;
+  }
+
+  .print-ticket .ticket-label {
+    font-size: 7pt;
+    color: #888;
+  }
+
+  .print-ticket .ticket-price {
+    font-size: 8pt;
+    color: #555;
+    font-weight: bold;
+  }
+
+  .print-header {
+    text-align: center;
+    margin-bottom: 6mm;
+    border-bottom: 2px solid #c8a800;
+    padding-bottom: 4mm;
+  }
+
+  .print-header h1 {
+    font-size: 20pt;
+    font-weight: 900;
+    color: #1a1a2e;
+  }
+
+  .print-header p {
+    font-size: 9pt;
+    color: #555;
+  }
+}

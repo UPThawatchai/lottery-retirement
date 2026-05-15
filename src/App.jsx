@@ -3,6 +3,8 @@ import { useLottery } from './hooks/useLottery'
 import TicketGrid from './components/TicketGrid'
 import StatsBadge from './components/StatsBadge'
 import SavedSets from './components/SavedSets'
+import PrintableTickets from './components/PrintableTickets'
+import Footer from './components/Footer'
 import './index.css'
 
 const STRATEGIES = [
@@ -18,6 +20,7 @@ const TABS = [
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('main')
+  const [showPrint, setShowPrint] = useState(false)
   const {
     tickets, isGenerating, strategy, setStrategy,
     analysis, generate, regenerateOne,
@@ -29,6 +32,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen text-white">
+      {showPrint && (
+        <PrintableTickets tickets={tickets} onClose={() => setShowPrint(false)} />
+      )}
       {/* Header */}
       <header className="text-center py-8 px-4">
         <div className="text-5xl mb-3">🎰</div>
@@ -147,13 +153,21 @@ export default function App() {
               <TicketGrid tickets={tickets} onRegenerate={regenerateOne} />
             </div>
 
-            {/* Save button */}
-            <button
-              onClick={saveCurrentSet}
-              className="w-full py-3 rounded-2xl font-bold text-sm bg-white/10 hover:bg-white/20 text-yellow-300 border border-yellow-400/30 transition-colors"
-            >
-              💾 บันทึกชุดเลขนี้
-            </button>
+            {/* Action buttons */}
+            <div className="flex gap-3">
+              <button
+                onClick={saveCurrentSet}
+                className="flex-1 py-3 rounded-2xl font-bold text-sm bg-white/10 hover:bg-white/20 text-yellow-300 border border-yellow-400/30 transition-colors"
+              >
+                💾 บันทึกชุดเลข
+              </button>
+              <button
+                onClick={() => setShowPrint(true)}
+                className="flex-1 py-3 rounded-2xl font-bold text-sm bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 border border-blue-400/30 transition-colors"
+              >
+                🖨️ พิมพ์/Export
+              </button>
+            </div>
 
             {/* Analysis */}
             <StatsBadge analysis={analysis} />
@@ -180,6 +194,7 @@ export default function App() {
 
         </> /* end main tab */}
       </main>
+      <Footer />
     </div>
   )
 }
